@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { JXA_SOURCE, macCommand, main, parseArguments, shellQuote } from '../lib/block-alert.js';
+import { BRAIN_CELL_FRAMES, JXA_SOURCE, macCommand, main, parseArguments, shellQuote } from '../lib/block-alert.js';
 
 test('defaults create a blocked alert', () => {
   assert.deepEqual(parseArguments([]), { title: 'AGENT IS BLOCKED. IT’S GIVING BRICK WALL.', message: 'bestie... the agent is absolutely cooked. pls provide human aura.', duration: 15, relayMac: false, dryRun: false });
@@ -23,9 +23,13 @@ test('dry run is portable', async () => {
 });
 
 test('the native alert is a bounded, closable corner pet', () => {
+  assert.equal(BRAIN_CELL_FRAMES.length, 8);
+  assert.match(BRAIN_CELL_FRAMES[0], /assets\/braincell-frames\/frame-1\.png$/);
   assert.match(JXA_SOURCE, /NSWindowStyleMaskClosable/);
   assert.match(JXA_SOURCE, /NSWindowStyleMaskNonactivatingPanel/);
   assert.match(JXA_SOURCE, /click the red X anytime/);
+  assert.match(JXA_SOURCE, /NSImageView/);
+  assert.match(JXA_SOURCE, /framePaths\[tick % framePaths\.length\]/);
   assert.match(JXA_SOURCE, /runUntilDate/);
   assert.doesNotMatch(JXA_SOURCE, /NSScreenSaverWindowLevel|runModal|activateIgnoringOtherApps/);
 });
