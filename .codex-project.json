@@ -1,0 +1,37 @@
+{
+  "allowedDestructiveTargets": [],
+  "assetPolicy": "none",
+  "commands": {},
+  "components": {
+    "assets": {
+      "policy": "none",
+      "storageHost": "vps"
+    },
+    "service": {
+      "buildHost": "vps",
+      "runtimeHost": "vps"
+    }
+  },
+  "dataClasses": {
+    "assets": "none",
+    "production": "none",
+    "source": "git"
+  },
+  "dependencies": [],
+  "environments": {
+    "development": {}
+  },
+  "lifecycleMode": "development-only",
+  "name": "block-alert",
+  "permittedMacExceptions": [],
+  "projectClass": "web-vps",
+  "repository": "joenermunch/block-alert",
+  "schemaVersion": 1,
+  "status": "active",
+  "storage": {
+    "quotaBytes": 5368709120,
+    "temporaryRetentionDays": 7,
+    "warnBytes": 2147483648
+  },
+  "vpsWorkspace": "/srv/codex/workspaces/block-alert"
+}

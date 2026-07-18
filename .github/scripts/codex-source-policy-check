@@ -1,0 +1,139 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+from pathlib import Path, PurePosixPath
+import re
+import subprocess
+import sys
+
+
+FORBIDDEN_COMPONENTS = {
+    ".build",
+    ".codex-worktrees",
+    ".venv",
+    ".wp-env",
+    "artifacts",
+    "build",
+    "dist",
+    "docker-volumes",
+    "node_modules",
+    "target",
+    "venv",
+    "volumes",
+}
+FORBIDDEN_SUFFIXES = {
+    ".7z",
+    ".bz2",
+    ".cab",
+    ".db",
+    ".dmg",
+    ".gz",
+    ".iso",
+    ".p12",
+    ".pfx",
+    ".rar",
+    ".sqlite",
+    ".sqlite3",
+    ".sqlitedb",
+    ".tar",
+    ".tgz",
+    ".wpress",
+    ".xz",
+    ".zip",
+    ".zst",
+}
+# Raw Ragnarok animation and archive formats are deploy-only VPS data.  This is
+# intentionally suffix-specific: ordinary rendered images remain valid source
+# when a project explicitly needs a small tracked UI resource.
+FORBIDDEN_RAW_ASSET_SUFFIXES = {".act", ".gpf", ".grf", ".spr"}
+SECRET_NAMES = {
+    ".env",
+    "credentials.json",
+    "id_ed25519",
+    "id_rsa",
+    "secrets.json",
+}
+SECRET_SUFFIXES = {".key", ".pem"}
+ALLOWED_ENV_NAMES = {".env.example", ".env.sample", ".env.template"}
+SECRET_PATTERNS = [
+    re.compile(rb"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
+    re.compile(rb"(?i)(?:OPENAI_API_KEY|AWS_SECRET_ACCESS_KEY|GITHUB_TOKEN)\s*=\s*[^\s$][^\r\n]{7,}"),
+]
+LFS_HEADER = b"version https://git-lfs.github.com/spec/v1\n"
+
+
+def git_paths(repo: Path, staged: bool) -> list[str]:
+    command = ["git", "-C", str(repo)]
+    if staged:
+        command += ["diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z"]
+    else:
+        command += ["ls-files", "-z"]
+    result = subprocess.run(command, check=True, capture_output=True)
+    return [item.decode("utf-8", "surrogateescape") for item in result.stdout.split(b"\0") if item]
+
+
+def findings_for_file(repo: Path, relative: str, max_bytes: int) -> list[str]:
+    findings: list[str] = []
+    pure = PurePosixPath(relative)
+    parts = set(pure.parts)
+    file_path = repo / Path(*pure.parts)
+    name_lower = pure.name.lower()
+    suffix_lower = pure.suffix.lower()
+    if parts & FORBIDDEN_COMPONENTS:
+        findings.append("forbidden-generated-path")
+    if suffix_lower in FORBIDDEN_SUFFIXES:
+        findings.append("forbidden-archive-or-database")
+    if suffix_lower in FORBIDDEN_RAW_ASSET_SUFFIXES:
+        findings.append("forbidden-raw-asset")
+    if name_lower in SECRET_NAMES and name_lower not in ALLOWED_ENV_NAMES:
+        findings.append("forbidden-secret-file")
+    if suffix_lower in SECRET_SUFFIXES:
+        findings.append("forbidden-secret-file")
+    if not file_path.is_file():
+        return findings
+    size = file_path.stat().st_size
+    with file_path.open("rb") as handle:
+        prefix = handle.read(min(size, 1_048_576))
+    is_lfs_pointer = prefix.startswith(LFS_HEADER)
+    if size > max_bytes and not is_lfs_pointer:
+        findings.append(f"oversized-file:{size}>{max_bytes}")
+    if suffix_lower == ".sql" and size > 1_048_576:
+        findings.append("probable-sql-dump")
+    if not is_lfs_pointer:
+        for pattern in SECRET_PATTERNS:
+            if pattern.search(prefix):
+                findings.append("probable-secret-content")
+                break
+    return findings
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Reject generated, secret, database, archive, and oversized Git content")
+    parser.add_argument("--repo", default=".")
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--staged", action="store_true")
+    mode.add_argument("--all-tracked", action="store_true")
+    parser.add_argument("--max-bytes", type=int, default=10 * 1024 * 1024)
+    args = parser.parse_args()
+    if args.max_bytes < 1:
+        parser.error("--max-bytes must be positive")
+    repo = Path(args.repo).resolve()
+    findings: list[tuple[str, str]] = []
+    try:
+        for relative in git_paths(repo, args.staged):
+            for reason in findings_for_file(repo, relative, args.max_bytes):
+                findings.append((relative, reason))
+    except subprocess.CalledProcessError as error:
+        print(f"error\tgit inspection failed with exit {error.returncode}", file=sys.stderr)
+        return 2
+    for relative, reason in findings:
+        print(f"violation\t{relative}\t{reason}")
+    if findings:
+        return 1
+    print(f"clean\tfiles={len(git_paths(repo, args.staged))}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
