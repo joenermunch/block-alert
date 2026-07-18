@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "grid": { "columns": 4, "rows": 4, "framesPerLoop": 16, "runtimeFrames": 128 },
+  "background": "#00ff00",
+  "runtimeStrategy": "Repeat each validated seamless 16-frame loop eight times.",
+  "mascots": [
+    "niblet-stylus", "niblet-smart-stylus", "pixel-core-miko", "oscilla",
+    "usb-flash-spirit", "koiwave-courier", "nixie-pulse", "kiko-keycap",
+    "mikobyte-packet-manta", "pixelin-holo-pad", "gyromochi", "nimbit",
+    "nimbi-9", "bytebun-relay", "glom", "bytebun-niko", "bitbloom",
+    "cachekin", "bytebun-nova", "bitbit-oracle"
+  ]
+}

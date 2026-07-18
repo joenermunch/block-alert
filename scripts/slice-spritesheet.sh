@@ -18,7 +18,7 @@ while [[ $# -gt 0 ]]; do
     *) echo "unknown option: $1" >&2; exit 64 ;;
   esac
 done
-helper=/Users/joenermunch/.codex/skills/.system/imagegen/scripts/remove_chroma_key.py
+helper=${CODEX_HOME:-$HOME/.codex}/skills/.system/imagegen/scripts/remove_chroma_key.py
 work_dir=$(mktemp -d)
 trap 'rm -rf "$work_dir"' EXIT
 normalized="$work_dir/normalized.png"

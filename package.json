@@ -26,7 +26,7 @@
   "scripts": {
     "test": "node --test",
     "test:assets": "bash scripts/verify-sprite-frames.sh && python3 -m unittest discover -s test -p 'test_*.py'",
-    "clean:frame-bleed": "python3 scripts/clean_frame_bleed.py assets/candidates assets/full assets/compact --write"
+    "build:generated-v2": "bash scripts/import-generated-v2.sh"
   },
   "keywords": [
     "alert",

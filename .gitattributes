@@ -1,3 +1,4 @@
 scripts/source-assets/*.wav filter=lfs diff=lfs merge=lfs -text
 assets/**/*.webp filter=lfs diff=lfs merge=lfs -text
 assets/**/*.wav filter=lfs diff=lfs merge=lfs -text
+assets/generated-source-v2/**/*.png filter=lfs diff=lfs merge=lfs -text
