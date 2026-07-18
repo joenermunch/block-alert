@@ -1,8 +1,8 @@
 # block-alert
 
-`block-alert` is a zero-dependency CLI that posts a normal, transparent macOS
-notification when an agent is blocked. It is post-modern and extremely online,
-but never blocks your screen or input.
+`block-alert` is a zero-dependency CLI that shows a tiny, translucent corner
+pet when an agent is blocked. It is post-modern and extremely online, but
+never blocks your screen or input.
 
 ## Install
 
@@ -18,10 +18,11 @@ npm install --global block-alert
 block-alert --title 'AGENT IS BLOCKED!' --message 'Need approval to deploy.'
 ```
 
-It uses the normal macOS notification UI, plays a sound, and auto-dismisses or
-can be dismissed normally. It never opens a modal, full-screen, kiosk, or
-input-capturing window. The default message is: “bestie... the agent is
-absolutely cooked. pls provide human aura.”
+It opens a small floating card in the lower-right corner, plays a sound, and
+disappears after 15 seconds. Click its standard macOS red **X** at any time to
+close it sooner. `--duration 2..30` changes that safe timeout. It never opens
+a modal, full-screen, kiosk, or input-capturing window. The default message is:
+“bestie... the agent is absolutely cooked. pls provide human aura.”
 
 ## Use from the VPS
 
