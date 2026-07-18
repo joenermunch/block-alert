@@ -1,0 +1,10 @@
+music-box-c-sharp.wav and derived candidate melodies
+
+Title: Music box, C# #1
+Author: Joseph SARDIN
+Source: https://bigsoundbank.com/music-box-cd-1-s1868.html
+License: CC0 1.0 Universal
+License URL: https://creativecommons.org/publicdomain/zero/1.0/
+
+The files under candidates/ are original arrangements produced by block-alert
+from the CC0 source recording above.

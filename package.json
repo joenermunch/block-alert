@@ -1,7 +1,7 @@
 {
   "name": "block-alert",
-  "version": "1.0.4",
-  "description": "A full-screen macOS alert for blocked agents, with a secure VPS-to-Mac relay.",
+  "version": "1.1.0",
+  "description": "A movable, resizable macOS desktop pet for blocked agents, with a secure VPS-to-Mac relay.",
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -10,8 +10,10 @@
   "files": [
     "bin",
     "lib",
-    "assets/braincell-frames-32",
-    "assets/buffering-braincell-spritesheet-32.png",
+    "assets/candidates",
+    "assets/full",
+    "assets/compact",
+    "assets/sounds",
     "README.md",
     "LICENSE"
   ],
@@ -19,7 +21,8 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "test:assets": "bash scripts/verify-sprite-frames.sh"
   },
   "keywords": [
     "alert",

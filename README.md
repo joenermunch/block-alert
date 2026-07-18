@@ -1,8 +1,8 @@
 # block-alert
 
-`block-alert` is a zero-dependency CLI that shows an animated tiny pink
-Buffering Braincell corner pet when an agent is blocked. It is post-modern and
-extremely online, but never blocks your screen or input.
+`block-alert` is a zero-dependency CLI that shows a transparent animated
+desktop pet for agent status. It is visible without becoming a modal,
+full-screen, kiosk, or input-capturing warning.
 
 ## Install
 
@@ -15,15 +15,24 @@ npm install --global block-alert
 ## Use on the Mac
 
 ```sh
-block-alert --title 'AGENT IS BLOCKED!' --message 'Need approval to deploy.'
+block-alert --state blocked
+block-alert --state working
+block-alert --state blocked --compact
 ```
 
-It opens a small floating card in the lower-right corner and
-cycles 32 sprite frames every ~330 ms. It disappears after 15 seconds; click
-its standard macOS red **X** at any time to close it sooner. `--duration 2..30`
-changes that safe timeout. It never opens a modal, full-screen, kiosk, or
-input-capturing window. The default message is:
-“The process has reached the void. Your input is the only remaining event.”
+Full mode shows an animated comic bubble reading `ALL AGENTS WORKING` or
+`AGENT(S) BLOCKED`. Compact mode replaces the bubble with a small animated
+status symbol. Mascots animate at 24 FPS from 128-frame sequences.
+
+Blocked mode plays a mascot-specific eight-note music-box melody, then repeats
+it at a calm ten-second interval. Right-click the pet and choose **Mute sound** or
+run with `--mute`. The right-click mute choice persists.
+
+The melodies use Joseph SARDIN's real music-box recording
+[Music box, C# #1](https://bigsoundbank.com/music-box-cd-1-s1868.html),
+released under CC0 1.0, instead of synthesized sine-wave beeps.
+There are 20 mascot options and 20 distinct melodies. Changing mascot with the
+bottom arrows also previews that mascot's melody.
 
 ## Keep it open while testing
 
@@ -31,14 +40,16 @@ input-capturing window. The default message is:
 block-alert --keep-open
 ```
 
-This is an opt-in preview mode. The pet stays above normal apps, across
-Spaces and full-screen apps, until you click the normal red **X**; closing it
-also ends the command. It remains non-modal and never captures input.
+This is an opt-in preview mode. Drag anywhere on the visible pet to move it.
+Drag any edge to resize; the cursor changes to show move, resize, and arrow
+hit areas. The frame is remembered for future alerts. Use the bottom arrows to
+switch mascot. Right-click for **Compact status**, **Full status**,
+**Mute sound**, and **Close**. There are no titlebar or close buttons.
 
 ## Use from the VPS
 
 ```sh
-block-alert --relay-mac --title 'AGENT IS BLOCKED!' --message 'VPS task needs your input.'
+block-alert --relay-mac --state blocked
 ```
 
 Relay mode uses the pre-existing private `oracle-mac` SSH bridge. It opens the
@@ -50,7 +61,7 @@ port, browser session, or copied secret.
 When a task becomes blocked, run:
 
 ```sh
-block-alert --relay-mac --message 'task-123 is blocked: waiting for user approval'
+block-alert --relay-mac --state blocked
 ```
 
 On the Mac, omit `--relay-mac`. `--dry-run` prints the sanitized action without
