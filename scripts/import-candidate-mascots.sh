@@ -52,7 +52,7 @@ import_set_grid() {
   max_height=$(magick identify -format '%h\n' "$destination"/frame-*.png | sort -nr | head -1)
   for frame_file in "$destination"/frame-*.png; do
     temporary=${frame_file}.normalized.png
-    magick "$frame_file" -background none -gravity center -extent "${max_width}x${max_height}" "$temporary"
+    magick "$frame_file" +repage -background none -gravity center -extent "${max_width}x${max_height}" +repage "$temporary"
     mv "$temporary" "$frame_file"
   done
   printf 'imported=%s frames=%s\n' "$name" "$offset"
