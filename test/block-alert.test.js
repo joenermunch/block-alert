@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { JXA_SOURCE, macCommand, main, parseArguments, shellQuote } from '../lib/block-alert.js';
+import { APPLE_SCRIPT, macCommand, main, parseArguments, shellQuote } from '../lib/block-alert.js';
 
 test('defaults create a blocked alert', () => {
   assert.deepEqual(parseArguments([]), { title: 'AGENT IS BLOCKED. IT’S GIVING BRICK WALL.', message: 'bestie... the agent is absolutely cooked. pls provide human aura.', relayMac: false, dryRun: false });
@@ -22,9 +22,7 @@ test('dry run is portable', async () => {
   assert.equal(JSON.parse(output[0]).action, 'relay-mac');
 });
 
-test('the native alert is an actual red full-screen AppKit window', () => {
-  assert.match(JXA_SOURCE, /NSWindowStyleMaskBorderless/);
-  assert.match(JXA_SOURCE, /NSScreenSaverWindowLevel/);
-  assert.match(JXA_SOURCE, /NSColor\.redColor/);
-  assert.match(JXA_SOURCE, /AIGHT BET\. I.M LOCKED IN\./);
+test('the native alert is a normal non-modal macOS notification', () => {
+  assert.match(APPLE_SCRIPT, /display notification/);
+  assert.doesNotMatch(APPLE_SCRIPT, /NSWindow|runModal|NSScreenSaverWindowLevel/);
 });

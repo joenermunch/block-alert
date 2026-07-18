@@ -1,8 +1,8 @@
 # block-alert
 
-`block-alert` is a zero-dependency CLI that puts a literal, full-screen red
-macOS warning on screen when an agent is blocked. It is professionally urgent,
-post-modern, and extremely online.
+`block-alert` is a zero-dependency CLI that posts a normal, transparent macOS
+notification when an agent is blocked. It is post-modern and extremely online,
+but never blocks your screen or input.
 
 ## Install
 
@@ -18,9 +18,10 @@ npm install --global block-alert
 block-alert --title 'AGENT IS BLOCKED!' --message 'Need approval to deploy.'
 ```
 
-It activates a borderless red AppKit window above normal applications, plays a
-sound, and remains until **AIGHT BET. I’M LOCKED IN.** is pressed. The default
-message is: “bestie... the agent is absolutely cooked. pls provide human aura.”
+It uses the normal macOS notification UI, plays a sound, and auto-dismisses or
+can be dismissed normally. It never opens a modal, full-screen, kiosk, or
+input-capturing window. The default message is: “bestie... the agent is
+absolutely cooked. pls provide human aura.”
 
 ## Use from the VPS
 
