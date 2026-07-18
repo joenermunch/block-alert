@@ -42,6 +42,9 @@ test('the native alert is a transparent, closable animated pet carousel', () => 
   assert.match(BLOCKED_SOUNDS[0], /assets\/sounds\/candidates\/niblet-stylus\.wav$/);
   assert.match(JXA_SOURCE, /NSWindowStyleMaskBorderless/);
   assert.match(JXA_SOURCE, /NSWindowStyleMaskNonactivatingPanel/);
+  assert.match(JXA_SOURCE, /panel\.setIgnoresMouseEvents\(false\)/);
+  assert.match(JXA_SOURCE, /panel\.setBecomesKeyOnlyIfNeeded\(false\)/);
+  assert.match(JXA_SOURCE, /panel\.makeKeyAndOrderFront\(null\)/);
   assert.doesNotMatch(JXA_SOURCE, /NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskResizable/);
   assert.match(JXA_SOURCE, /NSFloatingWindowLevel/);
   assert.match(JXA_SOURCE, /NSWindowCollectionBehaviorCanJoinAllSpaces/);
