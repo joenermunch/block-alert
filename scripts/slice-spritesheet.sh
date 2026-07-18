@@ -31,26 +31,13 @@ else
   exit 64
 fi
 
-read -r source_width source_height < <(magick identify -format '%w %h\n' "$normalized")
-grid_width=$((source_width / 4 * 4))
-grid_height=$((source_height / 8 * 8))
-cell_width=$((grid_width / 4))
-cell_height=$((grid_height / 8))
 inset=5
 padding=8
-output_width=$((cell_width - inset * 2 + padding * 2))
-output_height=$((cell_height - inset * 2 + padding * 2))
 mkdir -p "$output_dir"
 
-magick "$normalized" \
-  -crop "${grid_width}x${grid_height}+0+0" \
-  +repage \
-  -crop "${cell_width}x${cell_height}" \
-  +repage \
-  -shave "${inset}x${inset}" \
-  -bordercolor none \
-  -border "$padding" \
-  "$output_dir/frame-%d.png"
+python3 "$(dirname "$0")/slice_alpha_grid.py" \
+  "$normalized" "$output_dir" \
+  --columns 4 --rows 8 --inset "$inset" --padding "$padding"
 
 frame_count=$(find "$output_dir" -maxdepth 1 -type f -name 'frame-*.png' | wc -l | tr -d ' ')
 if [[ $frame_count -ne 32 ]]; then
