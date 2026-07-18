@@ -1,11 +1,24 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { BLOCKED_SOUNDS, CANDIDATE_SOUND_IDS, COMPACT_FRAME_SETS, FULL_FRAME_SETS, MASCOT_FRAME_SETS, macCommand, main, parseArguments, shellQuote, showMacAlert } from '../lib/agent-alert.js';
+import { BLOCKED_SOUNDS, CANDIDATE_SOUND_IDS, COMPACT_FRAME_SETS, FULL_FRAME_SETS, MASCOT_FRAME_SETS, captureMacPet, macCommand, main, parseArguments, shellQuote, showMacAlert } from '../lib/agent-alert.js';
 import { clampBounds, resizeBounds, windowOptions } from '../lib/electron-window.js';
 
 test('defaults create a blocked alert', () => {
-  assert.deepEqual(parseArguments([]), { title: 'AGENT(S) BLOCKED', message: 'The process has reached the void. Your input is the only remaining event.', duration: 15, state: 'blocked', compact: false, muted: false, relayMac: false, dryRun: false, keepOpen: false });
+  assert.deepEqual(parseArguments([]), { command: 'show', output: '/tmp/agent-alert-pet.png', title: 'AGENT(S) BLOCKED', message: 'The process has reached the void. Your input is the only remaining event.', duration: 15, state: 'blocked', compact: false, muted: false, relayMac: false, dryRun: false, keepOpen: false });
+});
+
+test('pet screenshot captures the resolved native window only', () => {
+  const calls = [];
+  const output = [];
+  captureMacPet('/tmp/pet.png', (command, args) => {
+    calls.push({ command, args });
+    if (command === 'swift') return { status: 0, stdout: '2098\t1873\t360\t430\t220\n' };
+    return { status: 0, stdout: '' };
+  }, (line) => output.push(line));
+  assert.equal(calls[1].command, '/usr/sbin/screencapture');
+  assert.deepEqual(calls[1].args, ['-x', '-l', '2098', '/tmp/pet.png']);
+  assert.deepEqual(JSON.parse(output[0]).bounds, { x: 1873, y: 360, width: 430, height: 220 });
 });
 
 test('rejects control characters and unexpected options', () => {
