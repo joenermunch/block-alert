@@ -31,9 +31,9 @@ input-capturing window. The default message is:
 block-alert --keep-open
 ```
 
-This is an opt-in preview mode. The pet stays in the corner until you click
-the normal red **X**; closing it also ends the command. It remains non-modal
-and never captures input.
+This is an opt-in preview mode. The pet stays above normal apps, across
+Spaces and full-screen apps, until you click the normal red **X**; closing it
+also ends the command. It remains non-modal and never captures input.
 
 ## Use from the VPS
 
