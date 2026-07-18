@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-roots=(assets/candidates assets/full assets/compact)
+if [[ $# -gt 0 ]]; then
+  roots=("$@")
+else
+  roots=(assets/candidates assets/full assets/compact)
+fi
 source_count=$(find "${roots[@]}" -type f -name 'frame-*.png' | wc -l | tr -d ' ')
 [[ $source_count -gt 0 ]] || { echo 'no PNG frames found' >&2; exit 1; }
 
