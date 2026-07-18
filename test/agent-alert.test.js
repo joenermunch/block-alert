@@ -70,6 +70,7 @@ test('Electron overlay matches Codex pet window and hit-test architecture', () =
   const rendererSource = readFileSync(new URL('../lib/renderer/renderer.js', import.meta.url), 'utf8');
   assert.match(mainSource, /setAlwaysOnTop\(true, 'floating'\)/);
   assert.match(mainSource, /setVisibleOnAllWorkspaces\(true, \{ visibleOnFullScreen: true \}\)/);
+  assert.match(mainSource, /getDisplayNearestPoint\(screen\.getCursorScreenPoint\(\)\)/);
   assert.match(mainSource, /setIgnoreMouseEvents\(passthrough, \{ forward: true \}\)/);
   assert.match(mainSource, /persist.*bounds/s);
   assert.match(preloadSource, /contextBridge\.exposeInMainWorld/);
