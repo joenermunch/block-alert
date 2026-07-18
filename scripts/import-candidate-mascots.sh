@@ -8,6 +8,14 @@ output_root=${1:-assets/candidates}
 import_set() {
   name=$1
   shift
+  import_set_grid "$name" 8 32 "$@"
+}
+
+import_set_grid() {
+  name=$1
+  rows=$2
+  target_per_sheet=$3
+  shift 3
   if [[ $# -ne 4 ]]; then
     echo "FAIL $name expected=4_sheets got=$#" >&2
     exit 1
@@ -15,8 +23,9 @@ import_set() {
   destination="$output_root/$name"
   mkdir -p "$destination"
   existing=$(find "$destination" -maxdepth 1 -type f -name 'frame-*.png' | wc -l | tr -d ' ')
-  if [[ $existing -eq 128 ]]; then
-    printf 'skipped=%s frames=128\n' "$name"
+  expected_total=$((target_per_sheet * 4))
+  if [[ $existing -eq $expected_total ]]; then
+    printf 'skipped=%s frames=%s\n' "$name" "$expected_total"
     return
   fi
   find "$destination" -maxdepth 1 -type f -name 'frame-*.png' -delete
@@ -24,14 +33,20 @@ import_set() {
   for sheet in "$@"; do
     [[ -f $sheet ]] || { echo "FAIL missing $sheet" >&2; exit 1; }
     temporary=$(mktemp -d)
-    scripts/slice-spritesheet.sh "$sheet" "$temporary"
+    scripts/slice-spritesheet.sh "$sheet" "$temporary" --rows "$rows"
+    source_per_sheet=$((rows * 4))
     frame=0
-    while [[ $frame -lt 32 ]]; do
-      mv "$temporary/frame-$frame.png" "$destination/frame-$((offset + frame)).png"
+    while [[ $frame -lt $target_per_sheet ]]; do
+      if [[ $target_per_sheet -eq 1 ]]; then
+        source_frame=0
+      else
+        source_frame=$(((frame * (source_per_sheet - 1) + (target_per_sheet - 1) / 2) / (target_per_sheet - 1)))
+      fi
+      cp "$temporary/frame-$source_frame.png" "$destination/frame-$((offset + frame)).png"
       frame=$((frame + 1))
     done
-    rmdir "$temporary"
-    offset=$((offset + 32))
+    rm -rf "$temporary"
+    offset=$((offset + target_per_sheet))
   done
   max_width=$(magick identify -format '%w\n' "$destination"/frame-*.png | sort -nr | head -1)
   max_height=$(magick identify -format '%h\n' "$destination"/frame-*.png | sort -nr | head -1)
@@ -77,7 +92,7 @@ generated_set glom "$generated_root/019f7393-1e5b-7fc1-878f-56c446bbb2bd"
 generated_set bytebun-niko "$generated_root/019f7393-3361-7082-bc65-f4b97ab032ad"
 generated_set bitbloom "$generated_root/019f7393-4506-7d71-9757-7bb561ad46d4"
 generated_set cachekin "$generated_root/019f7393-546b-7360-9fb9-1d2bb3b07b65"
-import_set bytebun-nova "$visual_root"/bytebun-nova-loop-sheet-{1,2,3,4}-of-4.png
+import_set_grid bytebun-nova 7 32 "$visual_root"/bytebun-nova-loop-sheet-{1,2,3,4}-of-4.png
 import_set bitbit-oracle "$visual_root"/bitbit-oracle/bitbit-oracle-sheet-0{1,2,3,4}-frames-*.png
 
 printf 'candidate_import=pass sets=20 frames=2560\n'

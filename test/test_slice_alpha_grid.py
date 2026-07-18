@@ -25,6 +25,17 @@ class SliceAlphaGridTest(unittest.TestCase):
         self.assertEqual(frames[0].getbbox(), (15, 10, 86, 58))
         self.assertEqual(frames[1].getbbox()[1], 5)
 
+    def test_supports_true_seven_row_source_sheet(self):
+        image = Image.new('RGBA', (80, 140))
+        draw = ImageDraw.Draw(image)
+        for row in range(7):
+            draw.rectangle((10, row * 20 + 3, 70, row * 20 + 16), fill='white')
+
+        frames = MODULE.slice_grid(image, 1, 7, 1, 2)
+
+        self.assertEqual(len(frames), 7)
+        self.assertTrue(all(frame.getbbox() for frame in frames))
+
 
 if __name__ == '__main__':
     unittest.main()
