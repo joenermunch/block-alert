@@ -23,8 +23,8 @@ test('dry run is portable', async () => {
 });
 
 test('the native alert is a bounded, closable corner pet', () => {
-  assert.equal(BRAIN_CELL_FRAMES.length, 8);
-  assert.match(BRAIN_CELL_FRAMES[0], /assets\/braincell-frames\/frame-1\.png$/);
+  assert.equal(BRAIN_CELL_FRAMES.length, 32);
+  assert.match(BRAIN_CELL_FRAMES[0], /assets\/braincell-frames-32\/frame-1\.png$/);
   assert.match(JXA_SOURCE, /NSWindowStyleMaskClosable/);
   assert.match(JXA_SOURCE, /NSWindowStyleMaskNonactivatingPanel/);
   assert.match(JXA_SOURCE, /click the red X anytime/);
