@@ -23,7 +23,7 @@ cycles 32 sprite frames every ~330 ms. It disappears after 15 seconds; click
 its standard macOS red **X** at any time to close it sooner. `--duration 2..30`
 changes that safe timeout. It never opens a modal, full-screen, kiosk, or
 input-capturing window. The default message is:
-“bestie... the agent is absolutely cooked. pls provide human aura.”
+“The process has reached the void. Your input is the only remaining event.”
 
 ## Keep it open while testing
 

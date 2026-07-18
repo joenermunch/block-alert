@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { BRAIN_CELL_FRAMES, JXA_SOURCE, macCommand, main, parseArguments, shellQuote } from '../lib/block-alert.js';
 
 test('defaults create a blocked alert', () => {
-  assert.deepEqual(parseArguments([]), { title: 'AGENT IS BLOCKED. IT’S GIVING BRICK WALL.', message: 'bestie... the agent is absolutely cooked. pls provide human aura.', duration: 15, relayMac: false, dryRun: false, keepOpen: false });
+  assert.deepEqual(parseArguments([]), { title: 'AGENT IS BLOCKED.', message: 'The process has reached the void. Your input is the only remaining event.', duration: 15, relayMac: false, dryRun: false, keepOpen: false });
 });
 
 test('rejects control characters and unexpected options', () => {
