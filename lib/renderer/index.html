@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Alert</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main id="pet-shell" data-drag-region aria-label="Agent status pet">
+    <img id="status-art" draggable="false" alt="">
+    <img id="mascot" draggable="false" alt="Selected pet">
+    <span class="hit mascot-hit" data-interactive aria-hidden="true"></span>
+    <span class="hit status-hit" data-interactive aria-hidden="true"></span>
+    <section id="pet-picker" data-interactive data-no-drag>
+      <button id="previous" type="button" aria-label="Previous pet">‹</button>
+      <span id="pet-name"></span>
+      <button id="next" type="button" aria-label="Next pet">›</button>
+    </section>
+    <button id="close" data-interactive data-no-drag type="button" aria-label="Close">×</button>
+    <i class="resize n" data-interactive data-no-drag data-resize="n"></i>
+    <i class="resize e" data-interactive data-no-drag data-resize="e"></i>
+    <i class="resize s" data-interactive data-no-drag data-resize="s"></i>
+    <i class="resize w" data-interactive data-no-drag data-resize="w"></i>
+    <i class="resize ne" data-interactive data-no-drag data-resize="ne"></i>
+    <i class="resize se" data-interactive data-no-drag data-resize="se"></i>
+    <i class="resize sw" data-interactive data-no-drag data-resize="sw"></i>
+    <i class="resize nw" data-interactive data-no-drag data-resize="nw"></i>
+  </main>
+  <script type="module" src="./renderer.js"></script>
+</body>
+</html>

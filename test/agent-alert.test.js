@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BLOCKED_SOUNDS, CANDIDATE_SOUND_IDS, COMPACT_FRAME_SETS, FULL_FRAME_SETS, JXA_SOURCE, MASCOT_FRAME_SETS, macCommand, main, parseArguments, shellQuote } from '../lib/agent-alert.js';
+import { readFileSync } from 'node:fs';
+import { BLOCKED_SOUNDS, CANDIDATE_SOUND_IDS, COMPACT_FRAME_SETS, FULL_FRAME_SETS, MASCOT_FRAME_SETS, macCommand, main, parseArguments, shellQuote, showMacAlert } from '../lib/agent-alert.js';
+import { clampBounds, resizeBounds, windowOptions } from '../lib/electron-window.js';
 
 test('defaults create a blocked alert', () => {
   assert.deepEqual(parseArguments([]), { title: 'AGENT(S) BLOCKED', message: 'The process has reached the void. Your input is the only remaining event.', duration: 15, state: 'blocked', compact: false, muted: false, relayMac: false, dryRun: false, keepOpen: false });
@@ -25,7 +27,7 @@ test('dry run is portable', async () => {
   assert.equal(JSON.parse(output[0]).action, 'relay-mac');
 });
 
-test('the native alert is a transparent, closable animated pet carousel', () => {
+test('the Electron alert is a transparent, closable animated pet carousel', () => {
   assert.equal(MASCOT_FRAME_SETS.length, 20);
   assert.equal(FULL_FRAME_SETS.blocked.length, 20);
   assert.equal(FULL_FRAME_SETS.working.length, 20);
@@ -40,37 +42,37 @@ test('the native alert is a transparent, closable animated pet carousel', () => 
   assert.equal(CANDIDATE_SOUND_IDS.length, 20);
   assert.equal(BLOCKED_SOUNDS.length, 20);
   assert.match(BLOCKED_SOUNDS[0], /assets\/sounds\/candidates\/niblet-stylus\.wav$/);
-  assert.match(JXA_SOURCE, /NSWindowStyleMaskBorderless/);
-  assert.match(JXA_SOURCE, /NSWindowStyleMaskNonactivatingPanel/);
-  assert.match(JXA_SOURCE, /panel\.setIgnoresMouseEvents\(false\)/);
-  assert.match(JXA_SOURCE, /panel\.setBecomesKeyOnlyIfNeeded\(false\)/);
-  assert.match(JXA_SOURCE, /panel\.orderFront\(null\)/);
-  assert.doesNotMatch(JXA_SOURCE, /panel\.makeKeyAndOrderFront\(null\)/);
-  assert.doesNotMatch(JXA_SOURCE, /NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskResizable/);
-  assert.match(JXA_SOURCE, /NSFloatingWindowLevel/);
-  assert.match(JXA_SOURCE, /NSWindowCollectionBehaviorCanJoinAllSpaces/);
-  assert.match(JXA_SOURCE, /rightMouseDown:/);
-  assert.match(JXA_SOURCE, /closeAlert:/);
-  assert.doesNotMatch(JXA_SOURCE, /performClose:|closeButton|NSButton/);
-  assert.match(JXA_SOURCE, /mouseDragged:/);
-  assert.match(JXA_SOURCE, /resizeLeftRightCursor/);
-  assert.match(JXA_SOURCE, /resizeUpDownCursor/);
-  assert.match(JXA_SOURCE, /closedHandCursor/);
-  assert.match(JXA_SOURCE, /pointingHandCursor/);
-  assert.match(JXA_SOURCE, /setFrameAutosaveName/);
-  assert.match(JXA_SOURCE, /NSImageScaleProportionallyUpOrDown/);
-  assert.match(JXA_SOURCE, /ObjC\.registerSubclass/);
-  assert.match(JXA_SOURCE, /pendingArrow/);
-  assert.match(JXA_SOURCE, /bubblePaths\[tick % bubblePaths\.length\]/);
-  assert.match(JXA_SOURCE, /compactPaths\[tick % compactPaths\.length\]/);
-  assert.match(JXA_SOURCE, /toggleMute:/);
-  assert.match(JXA_SOURCE, /tick % 240 === 0/);
-  assert.match(JXA_SOURCE, /playBlockedSound/);
-  assert.match(JXA_SOURCE, /alertState === 'blocked'/);
-  assert.doesNotMatch(JXA_SOURCE, /wrappingLabelWithString/);
-  assert.match(JXA_SOURCE, /NSImageView/);
-  assert.match(JXA_SOURCE, /petPaths\[tick % petPaths\.length\]/);
-  assert.match(JXA_SOURCE, /runUntilDate/);
-  assert.match(JXA_SOURCE, /if \(!panel\.visible\) break/);
-  assert.doesNotMatch(JXA_SOURCE, /NSPopUpMenuWindowLevel|NSScreenSaverWindowLevel|runModal|activateIgnoringOtherApps/);
+  assert.deepEqual(windowOptions(), {
+    width: 430, height: 220, frame: false, transparent: true, backgroundColor: '#00000000',
+    hasShadow: false, resizable: false, fullscreenable: false, skipTaskbar: true,
+    alwaysOnTop: true, focusable: true, acceptFirstMouse: true, show: false, type: 'panel',
+  });
+  assert.deepEqual(clampBounds({ x: -500, y: 900, width: 430, height: 220 }, { x: 0, y: 0, width: 1440, height: 900 }), { x: 0, y: 680, width: 430, height: 220 });
+  assert.deepEqual(resizeBounds({ x: 100, y: 100, width: 430, height: 220 }, 'se', 40, 30), { x: 100, y: 100, width: 470, height: 250 });
+  assert.deepEqual(resizeBounds({ x: 100, y: 100, width: 430, height: 220 }, 'nw', 200, 100), { x: 180, y: 140, width: 350, height: 180 });
+});
+
+test('Mac launch uses the packaged Electron entry', () => {
+  let call;
+  showMacAlert('BLOCKED', 'Input needed', 15, true, 'blocked', false, true, (command, args, options) => {
+    call = { command, args, options };
+    return { status: 0 };
+  }, '/Applications/Electron.app/Contents/MacOS/Electron');
+  assert.equal(call.command, '/Applications/Electron.app/Contents/MacOS/Electron');
+  assert.match(call.args[0], /lib\/electron-main\.js$/);
+  assert.deepEqual(call.args.slice(1), ['--', 'blocked', '15', 'false', 'true', 'true']);
+  assert.equal(call.options.stdio, 'inherit');
+});
+
+test('Electron overlay matches Codex pet window and hit-test architecture', () => {
+  const mainSource = readFileSync(new URL('../lib/electron-main.js', import.meta.url), 'utf8');
+  const preloadSource = readFileSync(new URL('../lib/electron-preload.cjs', import.meta.url), 'utf8');
+  const rendererSource = readFileSync(new URL('../lib/renderer/renderer.js', import.meta.url), 'utf8');
+  assert.match(mainSource, /setAlwaysOnTop\(true, 'floating'\)/);
+  assert.match(mainSource, /setVisibleOnAllWorkspaces\(true, \{ visibleOnFullScreen: true \}\)/);
+  assert.match(mainSource, /setIgnoreMouseEvents\(passthrough, \{ forward: true \}\)/);
+  assert.match(mainSource, /persist.*bounds/s);
+  assert.match(preloadSource, /contextBridge\.exposeInMainWorld/);
+  assert.match(rendererSource, /data-resize/);
+  assert.match(rendererSource, /setMousePassthrough/);
 });

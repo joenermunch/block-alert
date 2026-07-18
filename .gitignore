@@ -1,3 +1,2 @@
-# ImageGen source sheets and unselected concept art remain local only.
-assets/*-source.png
-assets/lost-robot-spritesheet.png
+node_modules/
+*.tgz

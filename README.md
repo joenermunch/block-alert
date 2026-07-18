@@ -1,8 +1,10 @@
 # agent-alert
 
-`agent-alert` is a zero-dependency CLI that shows a transparent animated
-desktop pet for agent status. It is visible without becoming a modal,
-full-screen, kiosk, or input-capturing warning.
+`agent-alert` is an Electron CLI that shows a selectable floating desktop pet
+for agent status. Its window architecture follows the Codex desktop pet:
+transparent frameless panel, always on top, visible across Spaces, selective
+mouse passthrough, isolated renderer, and persistent position and size. It never
+becomes modal, full-screen, or kiosk UI.
 
 ## Install
 
@@ -40,11 +42,12 @@ bottom arrows also previews that mascot's melody.
 agent-alert --keep-open
 ```
 
-This is an opt-in preview mode. Drag anywhere on the visible pet to move it.
-Drag any edge to resize; the cursor changes to show move, resize, and arrow
-hit areas. The frame is remembered for future alerts. Use the bottom arrows to
-switch mascot. Right-click for **Compact status**, **Full status**,
-**Mute sound**, and **Close**. There are no titlebar or close buttons.
+This is an opt-in preview mode. Drag either visible pet surface to move it.
+Transparent gaps pass clicks through to windows behind it. Drag any edge or
+corner to resize; the cursor changes for each resize direction. Bounds and pet
+selection persist. Use the bottom arrows to switch mascot. Right-click for
+**Compact status**, **Full status**, **Mute sound**, and **Close**. A small
+hoverable close control is also available without a titlebar.
 
 ## Use from the VPS
 
