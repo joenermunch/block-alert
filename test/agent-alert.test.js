@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BLOCKED_SOUNDS, CANDIDATE_SOUND_IDS, COMPACT_FRAME_SETS, FULL_FRAME_SETS, JXA_SOURCE, MASCOT_FRAME_SETS, macCommand, main, parseArguments, shellQuote } from '../lib/block-alert.js';
+import { BLOCKED_SOUNDS, CANDIDATE_SOUND_IDS, COMPACT_FRAME_SETS, FULL_FRAME_SETS, JXA_SOURCE, MASCOT_FRAME_SETS, macCommand, main, parseArguments, shellQuote } from '../lib/agent-alert.js';
 
 test('defaults create a blocked alert', () => {
   assert.deepEqual(parseArguments([]), { title: 'AGENT(S) BLOCKED', message: 'The process has reached the void. Your input is the only remaining event.', duration: 15, state: 'blocked', compact: false, muted: false, relayMac: false, dryRun: false, keepOpen: false });
@@ -16,7 +16,7 @@ test('rejects control characters and unexpected options', () => {
 
 test('quotes a relay command without shell interpolation', () => {
   assert.equal(shellQuote("Joe's task"), "'Joe'\"'\"'s task'");
-  assert.equal(macCommand('BLOCKED', "Joe's task", 15), "block-alert --title 'BLOCKED' --message 'Joe'\"'\"'s task' --duration '15' --state 'blocked'");
+  assert.equal(macCommand('BLOCKED', "Joe's task", 15), "agent-alert --title 'BLOCKED' --message 'Joe'\"'\"'s task' --duration '15' --state 'blocked'");
 });
 
 test('dry run is portable', async () => {

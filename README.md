@@ -1,6 +1,6 @@
-# block-alert
+# agent-alert
 
-`block-alert` is a zero-dependency CLI that shows a transparent animated
+`agent-alert` is a zero-dependency CLI that shows a transparent animated
 desktop pet for agent status. It is visible without becoming a modal,
 full-screen, kiosk, or input-capturing warning.
 
@@ -9,15 +9,15 @@ full-screen, kiosk, or input-capturing warning.
 Install it on both the Mac and the VPS:
 
 ```sh
-npm install --global block-alert
+npm install --global agent-alert
 ```
 
 ## Use on the Mac
 
 ```sh
-block-alert --state blocked
-block-alert --state working
-block-alert --state blocked --compact
+agent-alert --state blocked
+agent-alert --state working
+agent-alert --state blocked --compact
 ```
 
 Full mode shows an animated comic bubble reading `ALL AGENTS WORKING` or
@@ -37,7 +37,7 @@ bottom arrows also previews that mascot's melody.
 ## Keep it open while testing
 
 ```sh
-block-alert --keep-open
+agent-alert --keep-open
 ```
 
 This is an opt-in preview mode. Drag anywhere on the visible pet to move it.
@@ -49,7 +49,7 @@ switch mascot. Right-click for **Compact status**, **Full status**,
 ## Use from the VPS
 
 ```sh
-block-alert --relay-mac --state blocked
+agent-alert --relay-mac --state blocked
 ```
 
 Relay mode uses the pre-existing private `oracle-mac` SSH bridge. It opens the
@@ -61,7 +61,7 @@ port, browser session, or copied secret.
 When a task becomes blocked, run:
 
 ```sh
-block-alert --relay-mac --state blocked
+agent-alert --relay-mac --state blocked
 ```
 
 On the Mac, omit `--relay-mac`. `--dry-run` prints the sanitized action without

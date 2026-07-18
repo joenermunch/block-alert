@@ -22,10 +22,10 @@
     "development": {}
   },
   "lifecycleMode": "development-only",
-  "name": "block-alert",
+  "name": "agent-alert",
   "permittedMacExceptions": [],
   "projectClass": "web-vps",
-  "repository": "joenermunch/block-alert",
+  "repository": "joenermunch/agent-alert",
   "schemaVersion": 1,
   "status": "active",
   "storage": {
@@ -33,5 +33,5 @@
     "temporaryRetentionDays": 7,
     "warnBytes": 2147483648
   },
-  "vpsWorkspace": "/srv/codex/workspaces/block-alert"
+  "vpsWorkspace": "/srv/codex/workspaces/agent-alert"
 }

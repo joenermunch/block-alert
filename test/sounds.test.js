@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { BLOCKED_SOUNDS } from '../lib/block-alert.js';
+import { BLOCKED_SOUNDS } from '../lib/agent-alert.js';
 
 function wavDuration(buffer) {
   assert.equal(buffer.toString('ascii', 0, 4), 'RIFF');

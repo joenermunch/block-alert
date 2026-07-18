@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-output=${1:-/private/tmp/block-alert-mascot-options.png}
+output=${1:-/private/tmp/agent-alert-mascot-options.png}
 font=/System/Library/Fonts/Supplemental/Arial.ttf
 tiles=$(mktemp -d)
 trap 'rm -rf "$tiles"' EXIT

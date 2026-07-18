@@ -1,11 +1,11 @@
 {
-  "name": "block-alert",
+  "name": "agent-alert",
   "version": "1.1.0",
   "description": "A movable, resizable macOS desktop pet for blocked agents, with a secure VPS-to-Mac relay.",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "block-alert": "bin/block-alert.js"
+    "agent-alert": "bin/agent-alert.js"
   },
   "files": [
     "bin",
@@ -33,10 +33,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joenermunch/block-alert.git"
+    "url": "git+https://github.com/joenermunch/agent-alert.git"
   },
   "bugs": {
-    "url": "https://github.com/joenermunch/block-alert/issues"
+    "url": "https://github.com/joenermunch/agent-alert/issues"
   },
-  "homepage": "https://github.com/joenermunch/block-alert#readme"
+  "homepage": "https://github.com/joenermunch/agent-alert#readme"
 }
