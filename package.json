@@ -1,0 +1,37 @@
+{
+  "name": "block-alert",
+  "version": "1.0.0",
+  "description": "A full-screen macOS alert for blocked agents, with a secure VPS-to-Mac relay.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "block-alert": "bin/block-alert.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "alert",
+    "blocked",
+    "agents",
+    "macos",
+    "vps"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joenermunch/block-alert.git"
+  },
+  "bugs": {
+    "url": "https://github.com/joenermunch/block-alert/issues"
+  },
+  "homepage": "https://github.com/joenermunch/block-alert#readme"
+}
