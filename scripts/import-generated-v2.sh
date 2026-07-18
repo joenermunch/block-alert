@@ -9,7 +9,10 @@ helper=${CODEX_HOME:-$HOME/.codex}/skills/.system/imagegen/scripts/remove_chroma
 manifest="$source_root/manifest.json"
 [[ -f $manifest ]] || { echo "missing manifest: $manifest" >&2; exit 1; }
 
-mapfile -t mascots < <(python3 - "$manifest" <<'PY'
+mascots=()
+while IFS= read -r mascot; do
+  mascots+=("$mascot")
+done < <(python3 - "$manifest" <<'PY'
 import json, sys
 with open(sys.argv[1], encoding='utf-8') as handle:
     print(*json.load(handle)['mascots'], sep='\n')
