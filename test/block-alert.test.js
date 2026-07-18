@@ -28,8 +28,7 @@ test('the native alert is a bounded, closable corner pet', () => {
   assert.match(BRAIN_CELL_FRAMES[0], /assets\/braincell-frames-32\/frame-1\.png$/);
   assert.match(JXA_SOURCE, /NSWindowStyleMaskClosable/);
   assert.match(JXA_SOURCE, /NSWindowStyleMaskNonactivatingPanel/);
-  assert.match(JXA_SOURCE, /NSStatusWindowLevel/);
-  assert.match(JXA_SOURCE, /NSWindowCollectionBehaviorCanJoinAllSpaces/);
+  assert.match(JXA_SOURCE, /NSFloatingWindowLevel/);
   assert.match(JXA_SOURCE, /click the red X anytime/);
   assert.match(JXA_SOURCE, /NSImageView/);
   assert.match(JXA_SOURCE, /framePaths\[tick % framePaths\.length\]/);
