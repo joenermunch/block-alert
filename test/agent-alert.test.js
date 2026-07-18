@@ -45,7 +45,7 @@ test('the Electron alert is a transparent, closable animated pet carousel', () =
   assert.deepEqual(windowOptions(), {
     width: 430, height: 220, frame: false, transparent: true, backgroundColor: '#00000000',
     hasShadow: false, resizable: false, fullscreenable: false, skipTaskbar: true,
-    alwaysOnTop: true, focusable: true, acceptFirstMouse: true, show: false, type: 'panel',
+    alwaysOnTop: true, focusable: true, acceptFirstMouse: true, show: true, type: 'panel',
   });
   assert.deepEqual(clampBounds({ x: -500, y: 900, width: 430, height: 220 }, { x: 0, y: 0, width: 1440, height: 900 }), { x: 0, y: 680, width: 430, height: 220 });
   assert.deepEqual(resizeBounds({ x: 100, y: 100, width: 430, height: 220 }, 'se', 40, 30), { x: 100, y: 100, width: 470, height: 250 });
